@@ -1,0 +1,110 @@
+<?php 
+    $url = 'http://'.$_SERVER['HTTP_HOST'];
+?>
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <?php include_once __DIR__.'/includes/head.php' ?>
+        <title>INDEX</title>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <?php include_once __DIR__.'/includes/header.php' ?>
+        <main class="container">
+            <form name="form-member" class="row">
+                <fieldset class="col-4 d-flex flex-column">
+                    <legend>PROFILE</legend>
+                    <label>User ID (Kode unik personal untuk Mesin wajib integer) <small class="mandatory-field">*</small> </label>
+                    <input type="number" min="1" name="userid" class="form-control" required/>
+                    <labe class="mt-1"l>nickname <small class="mandatory-field">*</small></label>
+                    <input type="text" name="nik" class="form-control">
+                    <label class="mt-1">Privilege <small class="mandatory-field">*</small>  </label>
+                    <select name="privilege" class="form-select">
+                        <option value="0">Normal</options>
+                        <option value="1">Enroll</options>
+                        <option value="2">Admin</options>
+                        <option value="3">Super Admin</options>
+                    </select>
+                   
+                </fieldset>
+                <fieldset class="col-4 d-flex flex-column">
+                    <legend>FINGERPRINT</legend>
+                    <span class="d-flex flex-nowrap w-100">
+                        <img onerror="this.style.display = 'none'" id="finger-image">
+                        <span id='capture-count'></span>
+                    </span>
+                    <span class="d-flex flex-nowrap justify-content-end w-75">
+                        <button type="button" class="btn btn-sm btn-primary" id="start-reg">Mulai Daftar</button>
+                        <button type="button" class="btn btn-sm btn-danger ms-1" id="cancel-reg">Batalkan</button>
+                    <span>
+                    <div>
+                        <h5 id="capture-stat"></h5>
+                    </div>
+                    <div>
+                        <progress id="template-quality" hidden></progress>
+                    </div>
+                    <input type="hidden" name="fp-template[0]"/>
+                    <input type="hidden" name="fp-template[2]"/>
+                    <input type="hidden" name="fp-template[1]"/>
+                    <input type="hidden" name="fp-template[3]"/>
+                    <input type="hidden" name="fp-template[4]"/>
+                    <input type="hidden" name="fp-template[5]"/>
+                    <input type="hidden" name="fp-template[6]"/>
+                    <input type="hidden" name="fp-template[7]"/>
+                    <input type="hidden" name="fp-template[8]"/>
+                    <input type="hidden" name="fp-template[9]"/>
+                   
+                </fieldset>
+                <fieldset class="col-4 d-flex flex-column">
+                    <legend> JARI</legend>
+                    <div id="fp-container" class="card w-100">
+                        <div class="card-body row w-100 flex-nowrap justify-content-between">
+                            <fieldset class="d-flex flex-column col-6">
+                                <h6>KIRI</h6>
+                                <label><input type="checkbox" name="fingerid" value="0"> Jempol</label>
+                                <label><input type="checkbox" name="fingerid" value="1"> Telunjuk</label>
+                                <label><input type="checkbox" name="fingerid" value="2"> Tengah</label>
+                                <label><input type="checkbox" name="fingerid" value="3"> Manis</label>
+                                <label><input type="checkbox" name="fingerid" value="4"> Kelingking</label>
+                            </fieldset>
+
+                            <fieldset class="d-flex flex-column col-6">
+                                <h6>KANAN</h6>
+                                <label><input type="checkbox" name="fingerid" value="5"> Jempol</label>
+                                <label><input type="checkbox" name="fingerid" value="6"> Telunjuk</label>
+                                <label><input type="checkbox" name="fingerid" value="7"> Tengah</label>
+                                <label><input type="checkbox" name="fingerid" value="8"> Manis</label>
+                                <label><input type="checkbox" name="fingerid" value="9"> Kelingking</label>
+                            </fieldset>
+                        </div>
+                        
+                    </div>
+                </fieldset>
+                <div class="col-12 mt-2 mb-3 d-flex flex-nowrap justify-content-end">
+                    <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                </div>
+            </form>
+            <table class="table">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>No</th>
+                        <th>User ID (id pada mesin)</th>
+                        <th>Nick nama</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+        </main>
+        
+        <script src="assets/js/member.js" async defer></script>
+    </body>
+</html>

@@ -37,6 +37,10 @@ header {
     width: 100%;
 }
 
+header > nav {
+    margin-left: auto;
+}
+
 header a {
     text-decoration: none;
     color: var(--color-white);
@@ -47,7 +51,7 @@ header a {
     font-weight: 600;
 }
 
-main {
+/* main {
     margin-left: auto;
     margin-right: auto;
     width: 80vw;
@@ -68,17 +72,18 @@ form > div:last-child {
     justify-content: end;
 }
 
-fieldset:first-child {
-    width: 65%;
+form > fieldset {
     border-radius: 8px;
 }
 
+form > fieldset:first-child {
+    width: 65%;
+}
 
-fieldset:nth-child(2) {
+form > fieldset:nth-child(2) {
     width: 32%;
     display: block;
-    border-radius: 8px;
-    margin-left: 25px;
+    margin-left: 22px;
 }
 
 legend {
@@ -100,11 +105,19 @@ input[type="number"] {
     outline-color: var(--color-primary);
 }
 
+input[type="text"]:read-only,
+input[type="number"]:read-only {
+    background-color: whitesmoke;
+    outline: none;
+}
+
 table {
     width: 100%;
     margin-top: 10px;
     border-collapse: collapse;
     border: none;
+    outline-width: 1px;
+    outline-color: silver;
 }
 
 table th {
@@ -134,10 +147,14 @@ button.danger {
     background-color: var(--color-danger);
     color: var(--color-white);
     border: 2px solid var(--color-danger)
-}
+} */
 
 progress {
     width: 100%;
+}
+
+a {
+    cursor: pointer;
 }
 
 #fp-container {
@@ -167,4 +184,29 @@ progress {
 
 .mandatory-field {
     color: var(--color-danger);
+}
+
+#index-main {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+    padding: 15px;
+}
+
+.card {
+    width: 24rem;
+    height: 24rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+/* nyolong twitter bootrap */
+.display-1 {
+    font-size: 5rem;
 }

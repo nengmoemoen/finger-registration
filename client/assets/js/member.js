@@ -6,12 +6,28 @@ const captureURL = new URL('http://localhost:24008'),
       progressBar = document.querySelector('#template-quality'),
       fingerImage = document.querySelector('#finger-image'),
       captureCount = document.querySelector('#capture-count'),
+      fingerIDs = document.querySelectorAll('input[name="fingerid"]'),
       form = document.forms['form-member'];
 let enroll = null,
     canceled = false,
     enrollIndex = 0;
 
 (async () => {
+
+    // check only one 
+    Array.from(fingerIDs, item => {
+
+        item.addEventListener('click', e => {
+            if(e.target.checked)
+            {
+                Array.prototype.forEach.call(fingerIDs, el => {
+                    if(!el.readonly && el.value != item.value)
+                        el.checked = false;
+                });
+            }
+        });
+
+    });
 
     startCapture.addEventListener('click', async e => {
         // init local service 
@@ -39,6 +55,7 @@ let enroll = null,
         enroll = setInterval(async () => await fingerCapture(), 1000);
     });
 
+    // caencel capture
     cancelCapture.addEventListener('click', async e => {
         var cc = await captureCancel();
         canceled = true;

@@ -1,5 +1,5 @@
 <?php 
-    $url = 'http://'.$_SERVER['HTTP_HOST'].'/fingerprint/client';
+    $url = 'http://'.$_SERVER['HTTP_HOST'];
 ?>
 
 <!DOCTYPE html>
@@ -21,67 +21,20 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <main>
-            <form name="form-member">
-                <fieldset>
-                    <legend>PROFILE</legend>
-                    <label>User ID (Kode unik personal untuk Mesin wajib integer) <small class="mandatory-field">*</small></label>
-                    <input type="number" min="1" name="userid" required/>
-                    <label>nickname <small class="mandatory-field">*</small></label>
-                    <input type="text" name="nik">
-                    <label> Jari</label>
-                    <div id="fp-container">
-                        <fieldset>
-                            <h4>KIRI</h4>
-                            <label><input type="radio" name="fingerid" value="0"> Jempol</label>
-                            <label><input type="radio" name="fingerid" value="1"> Telunjuk</label>
-                            <label><input type="radio" name="fingerid" value="2"> Tengah</label>
-                            <label><input type="radio" name="fingerid" value="3"> Manis</label>
-                            <label><input type="radio" name="fingerid" value="4"> Kelingking</label>
-                        </fieldset>
-
-                        <fieldset>
-                            <h4>KANAN</h4>
-                            <label><input type="radio" name="fingerid" value="5"> Jempol</label>
-                            <label><input type="radio" name="fingerid" value="6"> Telunjuk</label>
-                            <label><input type="radio" name="fingerid" value="7"> Tengah</label>
-                            <label><input type="radio" name="fingerid" value="8"> Manis</label>
-                            <label><input type="radio" name="fingerid" value="9"> Kelingking</label>
-                        </fieldset>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>FINGERPRINT</legend>
-                    <span style="display: flex; flex-wrap:nowrap; align-item: center; margin-bottom: 12px">
-                        <img onerror="this.style.display = 'none'" id="finger-image">
-                        <span id='capture-count'></span>
-                    </span>
-                    <button type="button" class="primary" id="start-reg">Mulai Daftar</button>
-                    <button type="button" class="danger" id="cancel-reg">Batalkan</button>
-                    <div>
-                        <span id="capture-stat"></span>
-                    </div>
-                    <div>
-                        <progress id="template-quality" hidden></progress>
-                    </div>
-                    <input type="hidden" name="fp-template"/>
-                </fieldset>
-                <div>
-                    <button type="submit" class="primary">Submit</button>
-                </div>
-            </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>User ID (id pada mesin)</th>
-                        <th>Nick nama</th>
-                    </tr>
-                </thead>
-                <tbody>
-                
-                </tbody>
-            </table>
+        <header>
+            <div></div>
+            <nav>
+            <a href="<?=$url?>/member.php" style="margin-left: auto">MEMBER</a>
+            <a href="<?=$url?>/device.php" style="margin-left: auto">ALAT</a>
+            </nav>
+        </header>
+        <main id="index-main">
+           <a href="<?=$url?>/member.php" class="card">
+                <h3 class="display-1">MEMBER</h3>
+           </a>
+           <a href="<?=$url?>/device.php" class="card">
+                <h3 class="display-1">ALAT</h3>
+           </a>
         </main>
         
         <script src="assets/js/member.js" async defer></script>
