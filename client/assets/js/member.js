@@ -1,4 +1,10 @@
 'use strict';
+/**
+ * Description placeholder
+ * @date 5/1/2023 - 9:08:54 AM
+ *
+ * @type {*}
+ */
 const captureURL = new URL('http://localhost:24008'),
       captureStat = document.getElementById('capture-stat'),
       startCapture = document.getElementById('start-reg'),
@@ -8,11 +14,18 @@ const captureURL = new URL('http://localhost:24008'),
       captureCount = document.querySelector('#capture-count'),
       fingerIDs = document.querySelectorAll('input[name="fingerid"]'),
       form = document.forms['form-member'];
+
+/**
+ * Description placeholder
+ * @date 5/1/2023 - 9:08:54 AM
+ *
+ * @type {*}
+ */
 let enroll = null,
     canceled = false,
     enrollIndex = 0;
 
-(async () => {
+(async (win) => {
     let fingerCheck = [];
     // check only one 
     Array.from(fingerIDs, (item, idx) => {
@@ -34,6 +47,7 @@ let enroll = null,
 
     });
 
+    // Start fingerprint capture
     startCapture.addEventListener('click', async e => {
         if(!fingerCheck.includes(true))
         {
@@ -87,6 +101,14 @@ let enroll = null,
         fingerImage.removeAttribute('src');
     });
 
+    
+    /**
+     * Capture process
+     * @date 5/1/2023 - 4:54:36 PM
+     *
+     * @async
+     * @returns {*}
+     */
     async function fingerCapture() {
         try
         {
@@ -147,7 +169,12 @@ let enroll = null,
 
         }
     }
-})();
+
+    // close fingerprint process when refresh
+    win.addEventListener('beforeunload', e => {
+        cancelCapture.dispatchEvent(new Event('click'));
+    });
+})(window);
 
 /**
  * Check / Init Fingerprint Capture service 

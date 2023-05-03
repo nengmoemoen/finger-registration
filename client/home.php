@@ -9,8 +9,8 @@
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
     <head>
-    <?php include_once __DIR__.'/includes/head.php' ?>
-        <title>INDEX</title>
+        <?php include_once __DIR__.'/includes/head.php' ?>
+        <title>HOME</title>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -25,7 +25,7 @@
                 <h3 class="display-1">ALAT</h3>
            </a>
         </main>
-        
+        <?php include_once __DIR__.'/includes/js_lib.php' ?>
         <script src="assets/js/member.js" async defer></script>
     </body>
 </html>

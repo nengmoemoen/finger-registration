@@ -10,7 +10,7 @@
 <html>
     <head>
         <?php include_once __DIR__.'/includes/head.php' ?>
-        <title>INDEX</title>
+        <title>MEMBER</title>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -18,7 +18,7 @@
         <![endif]-->
         <?php include_once __DIR__.'/includes/header.php' ?>
         <main class="container">
-            <form name="form-member" class="row" method="POST" action="<?php $url?>/add_member">
+            <form name="form-member" class="row" method="POST" action="<?php $url?>/member_post" enctype="multipart/form-data">
                 <fieldset class="col-4 d-flex flex-column">
                     <legend>PROFILE</legend>
                     <label>User ID (Kode unik personal untuk Mesin wajib integer) <small class="mandatory-field">*</small> </label>
@@ -105,7 +105,7 @@
                 </tbody>
             </table>
         </main>
-        
+        <?php include_once __DIR__.'/includes/js_lib.php' ?>
         <script src="assets/js/member.js" async defer></script>
     </body>
 </html>
