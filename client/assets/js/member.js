@@ -13,16 +13,21 @@ let enroll = null,
     enrollIndex = 0;
 
 (async () => {
-
+    let fingerCheck = [];
     // check only one 
-    Array.from(fingerIDs, item => {
-
+    Array.from(fingerIDs, (item, idx) => {
+        
         item.addEventListener('click', e => {
             if(e.target.checked)
             {
-                Array.prototype.forEach.call(fingerIDs, el => {
+                fingerCheck[idx] = true;
+                Array.prototype.forEach.call(fingerIDs, (el, idx) => {
                     if(!el.readonly && el.value != item.value)
+                    {
                         el.checked = false;
+                        fingerCheck[idx] = false;
+                    }
+                        
                 });
             }
         });
@@ -30,23 +35,35 @@ let enroll = null,
     });
 
     startCapture.addEventListener('click', async e => {
+        if(!fingerCheck.includes(true))
+        {
+            captureStat.classList.add('text-danger');
+            captureStat.innerHTML = "Pilih jari yang akan di daftarkan";
+            return;
+        }
         // init local service 
         const init = await captureInit();
         if(init.ret < 0) {
+            captureStat.classList.add('text-danger');
             captureStat.innerHTML = "Service fingerprint belum terinstall, Silahkan install terlebih dahulu";
             throw new Error("Service fingerprint belum terinstall, Silahkan install terlebih dahulu");
+            return;
         }
         
         // Start enroll
         const start = await captureStart();
         if(start.ret < 0 && start.ret !== -2005) {
+            captureStat.classList.add('text-danger');
             captureStat.innerHTML = "Alat tidak terhubung";
             throw new Error("Alat tidak terhubung");
+            return;
         }
 
         if(start.ret === -2005) {
+            captureStat.classList.add('text-danger');
             captureStat.innerHTML = "Operasi lain sedang berjalan, klik tombol batalkan untuk batalkan proses";
             throw new Error("Operasi Sedanga Berjalan");
+            return;
         }
 
         e.target.disabled = true;
@@ -63,6 +80,7 @@ let enroll = null,
         startCapture.removeAttribute('disabled');
         progressBar.value = 0;
         progressBar.hidden = true;
+        captureStat.classList.remove('text-success', 'text-danger');
         captureStat.innerHTML = '';
         captureCount.innerHTML = '';
         enrollIndex = 0;
@@ -74,7 +92,10 @@ let enroll = null,
         {
             canceled = false;
             let fpImage = await captureImage();
+            captureStat.classList.remove('text-success', 'text-danger');
+            captureStat.innerHTML = '';
             // if process was canceled
+
             if(canceled)
             {
                 clearInterval(enroll);
@@ -106,11 +127,14 @@ let enroll = null,
                 {
                     clearInterval(enroll);
                     const tpl = await captureTemplate();
-                    form['fp-template'].value = tpl.data.template;
-                    captureStat.innerHTML = 'Pengambilan sidik jari berhasil';
+                    let fingerIdx = fingerCheck.indexOf(true);
+                    document.querySelector('input[name="fp-template['+fingerIdx+']"]').value = tpl.data.template;
+                    console.log( fingerIDs[fingerIdx]);
+                    fingerIDs[fingerIdx].readonly = true;
+                    captureStat.classList.add('text-success');
+                    captureStat.innerText = 'Pengambilan sidik jari berhasil';
                     setTimeout(() => {
-                        var cancelEvent = new Event('click');
-                        cancelCapture.dispatchEvent(cancelEvent);
+                        cancelCapture.dispatchEvent(new Event('click'));
                     }, 1500);
                    
                 }

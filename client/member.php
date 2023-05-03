@@ -18,7 +18,7 @@
         <![endif]-->
         <?php include_once __DIR__.'/includes/header.php' ?>
         <main class="container">
-            <form name="form-member" class="row">
+            <form name="form-member" class="row" method="POST" action="<?php $url?>/add_member">
                 <fieldset class="col-4 d-flex flex-column">
                     <legend>PROFILE</legend>
                     <label>User ID (Kode unik personal untuk Mesin wajib integer) <small class="mandatory-field">*</small> </label>
@@ -34,34 +34,7 @@
                     </select>
                    
                 </fieldset>
-                <fieldset class="col-4 d-flex flex-column">
-                    <legend>FINGERPRINT</legend>
-                    <span class="d-flex flex-nowrap w-100">
-                        <img onerror="this.style.display = 'none'" id="finger-image">
-                        <span id='capture-count'></span>
-                    </span>
-                    <span class="d-flex flex-nowrap justify-content-end w-75">
-                        <button type="button" class="btn btn-sm btn-primary" id="start-reg">Mulai Daftar</button>
-                        <button type="button" class="btn btn-sm btn-danger ms-1" id="cancel-reg">Batalkan</button>
-                    <span>
-                    <div>
-                        <h5 id="capture-stat"></h5>
-                    </div>
-                    <div>
-                        <progress id="template-quality" hidden></progress>
-                    </div>
-                    <input type="hidden" name="fp-template[0]"/>
-                    <input type="hidden" name="fp-template[2]"/>
-                    <input type="hidden" name="fp-template[1]"/>
-                    <input type="hidden" name="fp-template[3]"/>
-                    <input type="hidden" name="fp-template[4]"/>
-                    <input type="hidden" name="fp-template[5]"/>
-                    <input type="hidden" name="fp-template[6]"/>
-                    <input type="hidden" name="fp-template[7]"/>
-                    <input type="hidden" name="fp-template[8]"/>
-                    <input type="hidden" name="fp-template[9]"/>
-                   
-                </fieldset>
+                <!-- JARI -->
                 <fieldset class="col-4 d-flex flex-column">
                     <legend> JARI</legend>
                     <div id="fp-container" class="card w-100">
@@ -87,6 +60,34 @@
                         
                     </div>
                 </fieldset>
+                <!-- REG FINGERPRINT-->
+                <fieldset class="col-4 d-flex flex-column">
+                    <legend>FINGERPRINT</legend>
+                    <span class="d-flex flex-nowrap w-100">
+                        <img onerror="this.style.display = 'none'" id="finger-image">
+                        <div class="d-flex flex-column align-items-center" style="width: 12rem">
+                            <span id='capture-count'></span>
+                            <small id="capture-stat" class="ms-4 mt-3 mb-2"></small>
+                            <progress id="template-quality" max="100" hidden></progress>
+                        </div>
+                    </span>
+                    <span class="d-flex flex-nowrap justify-content-end w-75">
+                        <button type="button" class="btn btn-sm btn-primary" id="start-reg">Mulai Daftar</button>
+                        <button type="button" class="btn btn-sm btn-danger ms-1" id="cancel-reg">Batalkan</button>
+                    <span>
+                    <input type="hidden" name="fp-template[0]"/>
+                    <input type="hidden" name="fp-template[1]"/>
+                    <input type="hidden" name="fp-template[2]"/>
+                    <input type="hidden" name="fp-template[3]"/>
+                    <input type="hidden" name="fp-template[4]"/>
+                    <input type="hidden" name="fp-template[5]"/>
+                    <input type="hidden" name="fp-template[6]"/>
+                    <input type="hidden" name="fp-template[7]"/>
+                    <input type="hidden" name="fp-template[8]"/>
+                    <input type="hidden" name="fp-template[9]"/>
+                   
+                </fieldset>
+              
                 <div class="col-12 mt-2 mb-3 d-flex flex-nowrap justify-content-end">
                     <button type="submit" class="btn btn-sm btn-primary">Submit</button>
                 </div>
