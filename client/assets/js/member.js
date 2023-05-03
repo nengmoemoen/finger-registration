@@ -35,20 +35,26 @@ let enroll = null,
             {
                 fingerCheck[idx] = true;
                 Array.prototype.forEach.call(fingerIDs, (el, idx) => {
-                    if(!el.readonly && el.value != item.value)
+                    // chekc if el has not class readonly but not this element then avalue is false
+                    if(!el.classList.contains('readonly') && el.value != item.value)
                     {
                         el.checked = false;
                         fingerCheck[idx] = false;
                     }
+                    // chekc if has class readonly then value is false
+                    if(el.classList.contains('readonly'))
+                        fingerCheck[idx] = false;
                         
                 });
             }
+
         });
 
     });
 
     // Start fingerprint capture
     startCapture.addEventListener('click', async e => {
+        console.log(fingerCheck);
         if(!fingerCheck.includes(true))
         {
             captureStat.classList.add('text-danger');
@@ -152,7 +158,8 @@ let enroll = null,
                     let fingerIdx = fingerCheck.indexOf(true);
                     document.querySelector('input[name="fp-template['+fingerIdx+']"]').value = tpl.data.template;
                     console.log( fingerIDs[fingerIdx]);
-                    fingerIDs[fingerIdx].readonly = true;
+                    fingerIDs[fingerIdx].classList.add('readonly');
+                    fingerIDs[fingerIdx].onclick = () => false;
                     captureStat.classList.add('text-success');
                     captureStat.innerText = 'Pengambilan sidik jari berhasil';
                     setTimeout(() => {

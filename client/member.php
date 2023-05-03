@@ -1,8 +1,5 @@
-<?php 
-    $url = 'http://'.$_SERVER['HTTP_HOST'];
-?>
-
 <!DOCTYPE html>
+<?php require_once __DIR__.'/includes/top.php' ?>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -18,7 +15,13 @@
         <![endif]-->
         <?php include_once __DIR__.'/includes/header.php' ?>
         <main class="container">
-            <form name="form-member" class="row" method="POST" action="<?php $url?>/member_post" enctype="multipart/form-data">
+            <?php if(!empty($_SESSION['flash_message'])):?>
+                <span class="alert alert-primary"><?= $_SESSION['flash_message']['message'] ?></span>
+            <?php 
+                unset($_SESSION['flash_message']);
+                endif;
+            ?>
+            <form name="form-member" class="row" method="POST" action="<?php $url?>/member_post.php" enctype="multipart/form-data">
                 <fieldset class="col-4 d-flex flex-column">
                     <legend>PROFILE</legend>
                     <label>User ID (Kode unik personal untuk Mesin wajib integer) <small class="mandatory-field">*</small> </label>
