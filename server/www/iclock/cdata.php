@@ -2,6 +2,8 @@
 // GET
 if($_SERVER['REQUEST_METHOD'] === 'GET')
 {
+    echo 'data';
+
     if(isset($_GET['options']) && $_GET['options'] === 'all')
     {
         $resp="GET OPTION FROM:".$sn."\n";
