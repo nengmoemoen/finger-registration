@@ -1,0 +1,25 @@
+[2023-05-04 09:52:04] PDOException: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'checktime' at row 1 in E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php:143
+Stack trace:
+#0 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(143): PDOStatement->execute(Array)
+#1 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(43): attlog('A3AQ194860843', '1\t2023-05-04 16...')
+#2 E:\works\te\fingerprint\finger-registration\server\www\iclock\index.php(9): require('E:\\works\\te\\fin...')
+#3 E:\works\te\fingerprint\finger-registration\server\www\index.php(3): require_once('E:\\works\\te\\fin...')
+#4 {main}[2023-05-04 09:52:37] PDOException: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'checktime' at row 1 in E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php:143
+Stack trace:
+#0 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(143): PDOStatement->execute(Array)
+#1 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(43): attlog('A3AQ194860843', '1\t2023-05-04 16...')
+#2 E:\works\te\fingerprint\finger-registration\server\www\iclock\index.php(9): require('E:\\works\\te\\fin...')
+#3 E:\works\te\fingerprint\finger-registration\server\www\index.php(3): require_once('E:\\works\\te\\fin...')
+#4 {main}[2023-05-04 09:53:53] PDOException: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'checktime' at row 1 in E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php:144
+Stack trace:
+#0 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(144): PDOStatement->execute(Array)
+#1 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(43): attlog('A3AQ194860843', '1\t2023-05-04 16...')
+#2 E:\works\te\fingerprint\finger-registration\server\www\iclock\index.php(9): require('E:\\works\\te\\fin...')
+#3 E:\works\te\fingerprint\finger-registration\server\www\index.php(3): require_once('E:\\works\\te\\fin...')
+#4 {main}[2023-05-04 09:54:35] PDOException: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'checktime' at row 1 in E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php:144
+Stack trace:
+#0 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(144): PDOStatement->execute(Array)
+#1 E:\works\te\fingerprint\finger-registration\server\www\iclock\cdata.php(43): attlog('A3AQ194860843', '1\t2023-05-04 16...')
+#2 E:\works\te\fingerprint\finger-registration\server\www\iclock\index.php(9): require('E:\\works\\te\\fin...')
+#3 E:\works\te\fingerprint\finger-registration\server\www\index.php(3): require_once('E:\\works\\te\\fin...')
+#4 {main}

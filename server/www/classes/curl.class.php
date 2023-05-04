@@ -1,7 +1,7 @@
 <?php
 
-class Curl
-{
+class Curl {
+
     private $options;
     private $headers;
 
