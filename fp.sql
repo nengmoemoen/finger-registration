@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.7.33 - MySQL Community Server (GPL)
+-- Server version:               10.3.8-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
--- HeidiSQL Version:             11.2.0.6213
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -26,9 +26,9 @@ CREATE TABLE IF NOT EXISTS `devices` (
   `netmask` varchar(50) NOT NULL DEFAULT '',
   `gateway` varchar(50) NOT NULL DEFAULT '',
   `sn` varchar(50) NOT NULL DEFAULT '',
-  `machine_number` int(11) NOT NULL DEFAULT '1',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `machine_number` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -38,13 +38,14 @@ CREATE TABLE IF NOT EXISTS `devices` (
 DROP TABLE IF EXISTS `fingerprint`;
 CREATE TABLE IF NOT EXISTS `fingerprint` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `member` int(11) DEFAULT '0',
-  `fp_number` int(11) DEFAULT '0',
-  `template` text,
+  `member` int(11) DEFAULT 0,
+  `fp_number` int(11) DEFAULT 0,
+  `template` text DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `Index 3` (`member`,`fp_number`),
   KEY `FK__members` (`member`),
   CONSTRAINT `FK__members` FOREIGN KEY (`member`) REFERENCES `members` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=268 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -54,8 +55,27 @@ CREATE TABLE IF NOT EXISTS `members` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `nickname` varchar(50) DEFAULT NULL,
+  `privilege` int(11) DEFAULT NULL,
+  `sn` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table member_finger.transactions
+DROP TABLE IF EXISTS `transactions`;
+CREATE TABLE IF NOT EXISTS `transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sn` varchar(50) DEFAULT NULL,
+  `user_id` varchar(50) DEFAULT NULL,
+  `checktime` datetime DEFAULT NULL,
+  `checktype` int(11) DEFAULT NULL,
+  `verifycode` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Index 2` (`sn`,`user_id`,`checktime`)
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
