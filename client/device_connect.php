@@ -1,21 +1,32 @@
 <?php 
 
 require_once __DIR__.'/classes/db.class.php';
-require_once __DIR__.'/classes/zkemkeeper.class.php';
+require_once __DIR__.'/classes/zklibrary.class.php';
 
-// $db = db::getInstance();
+$ip      = trim($_POST['ip_address']);
+$netmask = trim($_POST['netmask']);
+$gateway = trim($_POST['gateway']);
 
-// function getDevice() {
-//     global $db;
-//     $query = $db->prepare("SELECT * FROM devices LIMIT 1 ORDER BY id DESC");
-//     $query->execute();
-//     $arr = $query->fetch();
-//     $db = NULL;
-//     return $arr;
-// }
+if(!filter_var($ip, FILTER_VALIDATE_IP))
+{
+    http_response_code(422);
+    echo json_encode(['message' => 'Format Alamat IP tidak valid', 'type' => 'error']);
+    return;
+}
 
-$com = Fingerprint::connect('192.168.1.55', 4370);
+// 
+$com = new Zkemkeeper('192.168.1.55', 4370);
 
-var_dump($com->getStatus());
+if(!$com->connect())
+{
+    http_response_code(422);
+    echo json_encode(['message' => 'Alat tidak terhubung', 'type' => 'error']);
+    return;
+}
 
+$sn = $com->getSerialNumber();
+$com->disconnect();
+
+http_response_code(200);
+echo json_encode(['message' => 'Alat berhasil terhubung', 'type' => 'success', 'data' =>  ['sn' => $sn]]);
 ?>

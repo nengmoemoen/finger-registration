@@ -55,6 +55,6 @@
             </table>
         </main>
         <?php include_once __DIR__.'/includes/js_lib.php' ?>
-        <script src="assets/js/member.js" async defer></script>
+        <script src="assets/js/devices.js" async defer></script>
     </body>
 </html>

@@ -1,0 +1,1 @@
+{"userid":"1","nik":"naquib","privilege":"0","fingerid":"5","fp-template":"Array"}
