@@ -87,7 +87,7 @@ function operlog($sn, $content) {
                 }
                 catch(PDOException $e)
                 {
-                    file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+                    file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
                     $db->rollBack();
                     die('OK');
                 }
@@ -105,7 +105,7 @@ function operlog($sn, $content) {
                 }
                 catch(PDOException $e)
                 {
-                    file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+                    file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
                     $db->rollBack();
                     die('OK');
                 }
@@ -126,7 +126,7 @@ function operlog($sn, $content) {
 // Transaction
 function attlog($sn, $content) 
 {
-    $rows = explode("\n", $content);
+    $rows = explode("\n", trim($content));
     // declare reduce cant be inside loop
     global $db;
     $db->beginTransaction();
@@ -142,13 +142,14 @@ function attlog($sn, $content)
                                     ON DUPLICATE KEY UPDATE
                                     sn=:sn, user_id=:user, checktime=:time, checktype=:type, verifycode=:ver_code');
             $query->execute([':sn' => $sn, ':user' => trim($params[0]), ':time' => trim($params[1]), ':type' => intval($params[2]), ':ver_code' => intval($params[3])]);
+            $db->commit();
 
         }
-        $db->commit();
+       
     }
     catch(PDOException $e)
     {
-        file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+        file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
         $db->rollBack();
         die('OK');
     }
