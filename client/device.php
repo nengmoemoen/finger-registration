@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     $url = 'http://'.$_SERVER['HTTP_HOST'];
 ?>
 
@@ -18,7 +19,12 @@
         <![endif]-->
         <?php include_once __DIR__.'/includes/header.php' ?>
         <main class="container">
-            <form name="form-device" class="row justify-content-center">
+            <?php if(isset($_SESSION['flash_message'])): 
+                    $type = $_SESSION['flash_message']['type'] == 'error' ? 'danger' : $_SESSION['flash_message']['type'];
+            ?>
+                <span class="alert alert-<?=$type?>"><?=$_SESSION['flash_message']['message']?></span>
+            <?php endif; unset($_SESSION['flash_message']); ?>
+            <form name="form-device" class="row justify-content-center" method="POST" action="<?=$url?>/device_post.php">
                 <fieldset class="col-6 ">
                     <legend>DEVICE</legend>
                     <label>IP Address <small class="mandatory-field">*</small></label>

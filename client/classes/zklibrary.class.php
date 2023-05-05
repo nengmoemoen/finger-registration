@@ -53,6 +53,9 @@ class Zkemkeeper {
     }
     
     
+    function __destruct() {
+        $this->com->disconnect();
+    }
 }
 
 ?>
