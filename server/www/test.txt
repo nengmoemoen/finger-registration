@@ -1,1 +1,1 @@
-{"userid":"1","nik":"naquib","privilege":"0","fingerid":"5","fp-template":"Array"}
+{"ip_address":"192.168.1.55","netmask":"255.255.255.0","gateway":"192.168.1.1","sn":"A5NM174660155"}
