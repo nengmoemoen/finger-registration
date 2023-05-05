@@ -11,7 +11,7 @@ $netmask = trim($_POST['netmask']);
 $gateway = trim($_POST['gateway']);
 $sn = trim($_POST['sn']);
 
-file_put_contents(getcwd().'/test.txt', json_encode($_POST));
+//file_put_contents(getcwd().'/test.txt', json_encode($_POST));
 
 if(!filter_var($ip, FILTER_VALIDATE_IP))
 {
@@ -24,7 +24,7 @@ try
 {
     $query = $db->prepare('INSERT INTO devices(ip_address, netmask, gateway, sn, machine_number) 
                             VALUES(:ip, :netmask, :gateway, :sn, :num) ON DUPLICATE KEY UPDATE
-                            ip_address=:ip, netmask=:netmask, gateway=:gatewway, sn=:sn, machine_number=:num');
+                            ip_address=:ip, netmask=:netmask, gateway=:gateway, sn=:sn, machine_number=:num');
     $query->execute([':ip' => $ip, ':netmask' => $netmask, ':gateway' => $gateway, ':sn' => $sn, ':num' => 1]);
     $id = $db->lastInsertId();
 

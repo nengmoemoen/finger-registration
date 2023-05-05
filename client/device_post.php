@@ -9,6 +9,8 @@ $db = db::getInstance();
 
 sendDataToServer($_POST);
 
+header('Location: '.$_SERVER['HTTP_REFERER']);
+
 $db = NULL;
 
 function sendDataToServer($data) {
@@ -20,7 +22,6 @@ function sendDataToServer($data) {
                         ->setHeader(['Content-Type: multipart/form-data'])
                         ->request('http://localhost:9001/device_post.php', 'POST', $_POST);
 
-        file_put_contents(getcwd().'/test.php', $request);
         $_SESSION['flash_message'] = json_decode($request, TRUE);
     }
     catch(Throwable $e)

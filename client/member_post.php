@@ -68,12 +68,19 @@ try
                     ->setHeader(['Content-Type: multipart/form-data'])
                     ->request('http://localhost:9001/member_post.php', 'POST', $_POST);
 
-    
+    $message = json_decode($request, TRUE);
 
+    if($message['type'] == 'error')
+    {
+        $_SESSION['flash_message'] = $message;
+        header('Location: '.$_SERVER['HTTP_REFERER']);
+        return;
+    }
 }
 catch(Throwable $e)
 {
     file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+    $_SESSION['flash_message'] = ['message' => 'Proses gagal', 'type' => 'error'];
 }
 
 
