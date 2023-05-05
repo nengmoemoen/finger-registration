@@ -64,9 +64,13 @@ $curl = new Curl();
 
 try
 {
+    $device = getDevice();
+    $input = $_POST;
+    $input['sn'] = $device['sn'];
+
     $request = $curl->setOption(['customrequest' => 'POST'])
-                    ->setHeader(['Content-Type: multipart/form-data'])
-                    ->request('http://localhost:9001/member_post.php', 'POST', $_POST);
+                    ->setHeader(['Content-Type: application/json'])
+                    ->request('http://localhost:9001/member_post.php', 'POST', json_encode($input));
 
     $message = json_decode($request, TRUE);
 
@@ -77,28 +81,56 @@ try
         return;
     }
 
-    $device = getDevice();
+    // add to device
+    $zk = new Zkemkeeper($device['ip_address'], 4370);
+    $templates = $input['fp_template'];
+    $fingerprint = array_filter($templates);
 
-    
+    if(!$zk->connect())
+    {
+        $_SESSION['flash_message'] = ['message' => 'Alat tidak teridentifikasi', 'type' => 'error'];
+        header('Location: '.$_SERVER['HTTP_REFERER']);
+        return;
+    }
 
+    $toMachine = $zk->setUserInfo($input['userid'], $input['nik'], '', $input['privilege'], TRUE);
+
+    if(!$toMachine)
+    {
+        $_SESSION['flash_message'] = ['message' => 'Data gagal di input', 'type' => 'error'];
+        header('Location: '.$_SERVER['HTTP_REFERER']);
+        return;
+    }
+
+    foreach($fingerprint as $k => $v)
+    {
+        $zk->setUserTmp($input['userid'], $k, 1, $v);
+    }
+
+    $zk->refresh();
+    $zk->disconnect();
+
+    $_SESSION['flash_message'] = ['message' => 'Data berhasil di input', 'type' => 'success'];
 }
 catch(Throwable $e)
 {
-    file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+    file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', "\n".'['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
     $_SESSION['flash_message'] = ['message' => 'Proses gagal', 'type' => 'error'];
 }
+
+header('Location: '.$_SERVER['HTTP_REFERER']);
 
 function getDevice() {
     $ret = NULL;
     $db = db::getInstance();
     try
     {
-        $query = $db->prepare('SELECT * FROM devices LIMIT 1');
-        $ret = $query->execute();
+        $query = $db->query('SELECT * FROM devices LIMIT 1');
+        $ret = $query->fetch(PDO::FETCH_ASSOC);
     }
     catch(PDOException $e)
     {
-        file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+        file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', "\n".'['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
         //$ret = ['message' => 'Proses gagal', 'type' => 'error'];
     }
 

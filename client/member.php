@@ -100,16 +100,16 @@
                         <button type="button" class="btn btn-sm btn-primary" id="start-reg">Mulai Daftar</button>
                         <button type="button" class="btn btn-sm btn-danger ms-1" id="cancel-reg">Batalkan</button>
                     <span>
-                    <input type="hidden" name="fp-template[0]"/>
-                    <input type="hidden" name="fp-template[1]"/>
-                    <input type="hidden" name="fp-template[2]"/>
-                    <input type="hidden" name="fp-template[3]"/>
-                    <input type="hidden" name="fp-template[4]"/>
-                    <input type="hidden" name="fp-template[5]"/>
-                    <input type="hidden" name="fp-template[6]"/>
-                    <input type="hidden" name="fp-template[7]"/>
-                    <input type="hidden" name="fp-template[8]"/>
-                    <input type="hidden" name="fp-template[9]"/>
+                    <input type="hidden" name="fp_template[0]"/>
+                    <input type="hidden" name="fp_template[1]"/>
+                    <input type="hidden" name="fp_template[2]"/>
+                    <input type="hidden" name="fp_template[3]"/>
+                    <input type="hidden" name="fp_template[4]"/>
+                    <input type="hidden" name="fp_template[5]"/>
+                    <input type="hidden" name="fp_template[6]"/>
+                    <input type="hidden" name="fp_template[7]"/>
+                    <input type="hidden" name="fp_template[8]"/>
+                    <input type="hidden" name="fp_template[9]"/>
                    
                 </fieldset>
               
@@ -123,7 +123,7 @@
                         <th>No</th>
                         <th>User ID (id pada mesin)</th>
                         <th>Nick nama</th>
-                        <th></th>
+                        <th>Privilege</th>
                     </tr>
                 </thead>
                 <tbody>
