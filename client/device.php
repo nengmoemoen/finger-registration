@@ -1,6 +1,24 @@
 <?php 
-    session_start();
-    $url = 'http://'.$_SERVER['HTTP_HOST'];
+    include_once __DIR__.'/includes/top.php';
+    function getDevices() {
+        $arr = [];
+        $db = db::getInstance();
+
+        try
+        {
+            $query = $db->query("SELECT * FROM devices LIMIT 1");
+            $arr = $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e)
+        {
+
+        }
+
+        $db = NULL;
+        return $arr;
+    }
+
+    $devices = getDevices();
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +67,7 @@
             <table class="table table-sm">
                 <thead class="bg-primary text-white">
                     <tr>
+                       <th>No</th>
                        <th>IP Address</th>
                        <th>Netmask</th>
                        <th>Gateway</th>
@@ -56,7 +75,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                
+                    <?php
+                        $i=0;
+                        foreach($devices as $device):
+                            $i++;
+                    ?>
+
+                    <tr>
+                        <td><?=$i?></td>
+                        <td><?=$device['ip_address']?></td>
+                        <td><?=$device['netmask']?></td>
+                        <td><?=$device['gateway']?></td>
+                        <td><?=$device['sn']?></td>
+                    </tr>
+
+                    <?php endforeach; unset($devices); ?>
                 </tbody>
             </table>
         </main>

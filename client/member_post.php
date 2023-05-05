@@ -3,7 +3,7 @@ session_start();
 
 require_once __DIR__.'/classes/db.class.php';
 require_once __DIR__.'/classes/curl.class.php';
-require_once __DIR__.'/classes/zkemkeeper.class.php';
+require_once __DIR__.'/classes/zklibrary.class.php';
 
 
 if(!$_SERVER['REQUEST_METHOD'] === 'POST')
@@ -76,6 +76,11 @@ try
         header('Location: '.$_SERVER['HTTP_REFERER']);
         return;
     }
+
+    $device = getDevice();
+
+    
+
 }
 catch(Throwable $e)
 {
@@ -83,5 +88,21 @@ catch(Throwable $e)
     $_SESSION['flash_message'] = ['message' => 'Proses gagal', 'type' => 'error'];
 }
 
+function getDevice() {
+    $ret = NULL;
+    $db = db::getInstance();
+    try
+    {
+        $query = $db->prepare('SELECT * FROM devices LIMIT 1');
+        $ret = $query->execute();
+    }
+    catch(PDOException $e)
+    {
+        file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+        //$ret = ['message' => 'Proses gagal', 'type' => 'error'];
+    }
+
+    return $ret;
+}
 
 ?>
