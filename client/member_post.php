@@ -69,7 +69,10 @@ try
                     ->request('http://localhost:9001/member_post.php', 'POST', $_POST);
 
     
-
+    if(!$request['type'] === 'success')
+    {
+        
+    }
 }
 catch(Throwable $e)
 {

@@ -9,6 +9,8 @@ $db = db::getInstance();
 
 sendDataToServer($_POST);
 
+header('Location: '.$_SERVER['HTTP_REFERER']);
+
 $db = NULL;
 
 function sendDataToServer($data) {
