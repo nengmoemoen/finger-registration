@@ -69,14 +69,12 @@ try
                     ->request('http://localhost:9001/member_post.php', 'POST', $_POST);
 
     
-    if(!$request['type'] === 'success')
-    {
-        
-    }
+
 }
 catch(Throwable $e)
 {
     file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+    $_SESSION['flash_message'] = ['message' => 'Proses gagal', 'type' => 'error'];
 }
 
 
