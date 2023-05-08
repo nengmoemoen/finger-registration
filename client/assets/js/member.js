@@ -157,7 +157,7 @@ let enroll = null,
                     const tpl = await captureTemplate();
                     let fingerIdx = fingerCheck.indexOf(true);
                     document.querySelector('input[name="fp_template['+fingerIdx+']"]').value = tpl.data.template;
-                    console.log( fingerIDs[fingerIdx]);
+                    
                     fingerIDs[fingerIdx].classList.add('readonly');
                     fingerIDs[fingerIdx].onclick = () => false;
                     captureStat.classList.add('text-success');

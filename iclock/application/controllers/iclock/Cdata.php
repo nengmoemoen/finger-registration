@@ -15,6 +15,11 @@ class Cdata extends CI_Controller {
 		// GET
 		if($_SERVER['REQUEST_METHOD'] === 'GET')
 		{
+
+			$ip_address = $_SERVER['REMOTE_ADDR'];
+			$data = ['ip_address' => $ip_address, 'sn' => $sn];
+			$this->general_model->upsert_device($data);
+
 			if(isset($_GET['options']) && $_GET['options'] === 'all')
 			{
 
@@ -30,6 +35,7 @@ class Cdata extends CI_Controller {
 				$resp .= "TransFlag=1111000000\n";
 				$resp .= "TimeZone=7\n";
 				$resp .= "Realtime=1\n";			
+				$resp .= "Encrypt=0\n";			
 							
 				header('Content-type: text/plain');				
 				echo $resp;	
@@ -84,38 +90,29 @@ class Cdata extends CI_Controller {
 						
 						$data = ['user_id' => $map['pin'], 'nickname' => $map['name'], 'privilege' => $map['pri'], 'sn' => $sn];
 						$this->general_model->upsert_member($data);
-						$this->db->trans_commit();
 	
 					}
 					catch(Exception $e)
 					{
 						log_messages('error', $e->__toString());
-						$this->db->trans_rollack();
 					}
 					// end
 					break;
 				case 'FP':
 					try
 					{
-						$query = $this->db->query('INSERT INTO fingerprint(member, fp_number, template) VALUES(:member, :fp_no, :template)
-												ON DUPLICATE KEY UPDATE 
-													member=:member, fp_number=:fp_no, template=:template');
-						$query->execute([':member' => $map['pin'], ':fp_no' => $map['fid'], ':template' => $map['tmp']]);
-						$id = $db->lastInsertId();
-	
+						$data = ['member' => $map['pin'], 'fp_number' => $map['fid'], 'template' => $map['tmp']];
+						$data = $this->general_model->upsert_finger($data);
+						
 					}
-					catch(PDOException $e)
+					catch(Exception $e)
 					{
-						file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', "\n".'['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
-						$db->rollBack();
-						die('OK');
+						log_messages('error', $e->__toString());
 					}
 					// end
 				break;
 			}
-			$db = NULL;
-	
-			unset($map);
+			$this->db->trans_complete();
 	
 			header('Content-type: text/plain');
 			echo 'OK';
@@ -129,32 +126,21 @@ class Cdata extends CI_Controller {
 	{
 		$rows = explode("\n", trim($content));
 		// declare reduce cant be inside loop
-		global $db;
-		$db->beginTransaction();
 		try
 		{
 			foreach($rows as $row)
 			{
 				$params = explode("\t", $row);
-				file_put_contents(getcwd().'/text.txt', json_encode($params), FILE_APPEND);
-			
-				// reduce
-				$query = $db->prepare('INSERT INTO transactions(sn, user_id, checktime, checktype, verifycode) VALUES(:sn, :user, :time, :type, :ver_code)
-										ON DUPLICATE KEY UPDATE
-										sn=:sn, user_id=:user, checktime=:time, checktype=:type, verifycode=:ver_code');
-				$query->execute([':sn' => $sn, ':user' => trim($params[0]), ':time' => trim($params[1]), ':type' => intval($params[2]), ':ver_code' => intval($params[3])]);
-				$db->commit();
-	
+
+				$data = ['sn' => $sn, 'user_id' => trim($params[0]), 'checktime' => trim($params[1]), 'checktype' => intval($params[2]), 'verifycode' => intval($params[3])];
+				$this->db->insert('transactions', $data);
 			}
 		   
 		}
-		catch(PDOException $e)
+		catch(Exception $e)
 		{
-			file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', "\n".'['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
-			$db->rollBack();
-			die('OK');
+			log_messages('error', $e->__toString());
 		}
-		$db = NULL;
 	
 		header('Content-type: text/plain');				
 		echo "OK\n";
