@@ -1,5 +1,27 @@
 <!DOCTYPE html>
-<?php require_once __DIR__.'/includes/top.php' ?>
+<?php 
+    require_once __DIR__.'/includes/top.php'; 
+    
+    function getMembers() {
+        $arr = [];
+        $db = db::getInstance();
+
+        try
+        {
+            $query = $db->query("SELECT * FROM members");
+            $arr = $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e)
+        {
+
+        }
+
+        $db = NULL;
+        return $arr;
+    }
+
+    $members = getMembers();
+?>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -78,16 +100,16 @@
                         <button type="button" class="btn btn-sm btn-primary" id="start-reg">Mulai Daftar</button>
                         <button type="button" class="btn btn-sm btn-danger ms-1" id="cancel-reg">Batalkan</button>
                     <span>
-                    <input type="hidden" name="fp-template[0]"/>
-                    <input type="hidden" name="fp-template[1]"/>
-                    <input type="hidden" name="fp-template[2]"/>
-                    <input type="hidden" name="fp-template[3]"/>
-                    <input type="hidden" name="fp-template[4]"/>
-                    <input type="hidden" name="fp-template[5]"/>
-                    <input type="hidden" name="fp-template[6]"/>
-                    <input type="hidden" name="fp-template[7]"/>
-                    <input type="hidden" name="fp-template[8]"/>
-                    <input type="hidden" name="fp-template[9]"/>
+                    <input type="hidden" name="fp_template[0]"/>
+                    <input type="hidden" name="fp_template[1]"/>
+                    <input type="hidden" name="fp_template[2]"/>
+                    <input type="hidden" name="fp_template[3]"/>
+                    <input type="hidden" name="fp_template[4]"/>
+                    <input type="hidden" name="fp_template[5]"/>
+                    <input type="hidden" name="fp_template[6]"/>
+                    <input type="hidden" name="fp_template[7]"/>
+                    <input type="hidden" name="fp_template[8]"/>
+                    <input type="hidden" name="fp_template[9]"/>
                    
                 </fieldset>
               
@@ -101,10 +123,39 @@
                         <th>No</th>
                         <th>User ID (id pada mesin)</th>
                         <th>Nick nama</th>
+                        <th>Privilege</th>
                     </tr>
                 </thead>
                 <tbody>
-                
+                    <?php
+                        $i=0; 
+                        foreach($members as $member): 
+                            $i++;
+                            // privilege
+                            $priv = NULL;
+
+                            switch($member['privilege']) {
+                                case 0:
+                                    $priv = 'Normal';
+                                    break;
+                                case 1:
+                                    $priv = 'Enroll';
+                                    break;
+                                case 2:
+                                    $priv = 'Admin';
+                                    break;
+                                case 3:
+                                    $priv = 'Super Admin';
+                                    break;
+                            }
+                    ?>
+                        <tr>
+                            <td><?=$i?></td>
+                            <td><?=$member['user_id']?></td>
+                            <td><?=$member['nickname']?></td>
+                            <td><?=$priv?></td>
+                        </tr>
+                    <?php endforeach; unset($members); ?>
                 </tbody>
             </table>
         </main>

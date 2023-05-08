@@ -1,0 +1,7 @@
+
+[2023-05-05 23:59:53] com_exception: Error [0x8002000e] Invalid number of parameters.
+ in C:\laragon\www\fingerprint\finger-registration\client\classes\zklibrary.class.php:88
+Stack trace:
+#0 C:\laragon\www\fingerprint\finger-registration\client\classes\zklibrary.class.php(88): com->RefreshData()
+#1 C:\laragon\www\fingerprint\finger-registration\client\member_post.php(110): Zkemkeeper->refresh()
+#2 {main}

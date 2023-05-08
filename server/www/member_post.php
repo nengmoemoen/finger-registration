@@ -15,14 +15,13 @@ if(!$_SERVER['REQUEST_METHOD'] === 'POST')
 /*
 Array ( [userid] => 1 [nik] => naquib [privilege] => 0 [fingerid] => 5 [fp-template] => Array ( [0] => [1] => [2] => [3] => [4] => [5] => TcFTUzIxAAAEgoIECAUHCc7QAAAcg2kBAAAAhK8lg4KBAEgPswBGADqNRwB/AE4PXgBAgmQPugDyAMIPJ4K7AEkPHQBmAEuNvAAsAA4PkgAvgmIPFQDnAPsNNYIlAOQPRgDoAaKF+wAXACIDswCxgsMPbwBpAJQPq4JMAAUP0gARAL6PqAD7ABgPDwD3go4NzQBIAEAPHIJsAFMPzADIAYuN8AD9AGsPJwAZg+gPLAAeAWkPboKUAEMPaQAVADyNWwBVAFYPIgCdgjwP1wDkAGYN6oLFAL4PlwDhAHSNQQA4AOMPWgAkgxUPUwAWAKEP/4IxAJoDRQDyAZ+G2/iiBT4PA/sHuFYCSg8H+Ob8KeDb9AZbfXgg8W7m7P6HDA//rArrfBYCnojGCTui0YOIg6aCE/S2lw9xwAKOgaaC5Q92foJrnYrTF3qfFg5zgY9+0f+XCHKRDKJ2gE75PBgWrrP8VRFiiXMGcQrQ7S0DdoBjeIejPgRrBgtzaAMJKZuIaoW2yWfeNd1rgUNc6ggzEYPxc4Em/db323gPddbzSQfOdi/3egHWApOHkej4FUoeLwQeHn6Diwwe5D5sRQKJgweOPnxehEMNVQFLgXYApHpXFWuPbfeCc96LYau2QnogO4MDoyUfBADYAGL7BAAqAGbAswcEtQFmcHwJAIAAbUBldwsAVgC1w8VCw1GEBQBkxW18hgGEAHqLCcW6BITB/f/+QgXF3QSS/0oFAO4A1f3EfAoAtgWGg7BwAoK/CQk1/wjFtggCwYCECgBP02bEQobAbQMA+9wexIkBUhpgYmQEYQuClSVwwnJwrGoCgr4sD0T+DsVYK9zB/8L/i1i0HQR7MJqBkG+MocB638F0wQUAPPtcZooBmUVkwcFOwgmCzUiMw6CLB8F/igGzSwMu/u4WBYXZSS/9/f06/Pp/wf7/////Ov/7QgsAq1FtwgFnxuILALNRBv85/y3EBgD4yEYqP/0SgvY4l3KTwAd5xO92WRIAWVmfwvoGwGZpgMEDxBZfv+cjAPpEnATBxUOSw8DBwYyI/25Cw8DBhGnAARME7WpQc37AwUHBxUN0BAAUb1e9BgSYcVBVwikAfH0zQsD9wsDCwwrIxtmSpcXGwcIH/8dCw//CwsHDAcLAQMTBEQBGgIn/xn3AeMGEb8LMALAEQXh1wyIAPFygAnjBknx1UrF0x0LAwMKGDwCimE31XoR8wQwAqJhH+sBpfAQA51k6UIsBG6RQwMAHX8WTASGmTFpnZX7HfP4QAHi7PQdxxQKXwo4EACB5TMVCDwAlvEbBOomHQf+LGQDxwgaLekDFw8PExJaswXxBBQEQw71s5wD96ajCfJLDwFj+wEPA/3jBacEEwcVDwIQXAO3KjP74evr9/f/+/wf9+n/19kD/WwbEEM/BOf4LAGnU8Wd8Q44WANjZyQdtxg3EycPDfsGyxQyCFehGlcFvwAAdajyMAwCt/NLBAIKo/iSlAwA1/2B/CRD4JHD/OzH7hxELHC3Ed80Q869s/sD7wCrGEAalNcM= [6] => [7] => [8] => [9] => ) )
 */
-
+$input = json_decode(file_get_contents('php://input'), TRUE);
 // cek mandatoru
-$userid = trim($_POST['userid']);
-$nickname = trim($_POST['nik']);
-$privilege = intval($_POST['privilege']);
-$templates = $_POST['fp-template'];
+$userid = trim($input['userid']);
+$nickname = trim($input['nik']);
+$privilege = intval($input['privilege']);
+$templates = $input['fp_template'];
 $fingerprint = array_filter($templates);
-
 
 if(empty($userid) || empty($nickname) || count($templates) == 0)
 {
@@ -37,8 +36,8 @@ $db = db::getInstance();
 $db->beginTransaction();
 try
 {
-    $query = $db->prepare('INSERT INTO members(user_id, nickname, privilege) VALUES(:userid, :nick, :priv)');
-    $query->execute([':userid' => $userid, ':nick' =>  $nickname, ':priv' => $privilege]);
+    $query = $db->prepare('INSERT INTO members(user_id, nickname, privilege, sn) VALUES(:userid, :nick, :priv, :sn)');
+    $query->execute([':userid' => $userid, ':nick' =>  $nickname, ':priv' => $privilege, ':sn' => $input['sn']]);
     $memberId = $db->lastInsertId();
 
     foreach($fingerprint as $k => $v)
@@ -51,6 +50,7 @@ try
 }
 catch(PDOException $e)
 {
+    file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', "\n".'['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
     $db->rollBack();
     http_response_code(500);
     echo json_encode(['message' => 'Data gagal di simpan', 'type' => 'error']);

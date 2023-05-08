@@ -105,7 +105,7 @@ function operlog($sn, $content) {
                 }
                 catch(PDOException $e)
                 {
-                    file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+                    file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', "\n".'['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
                     $db->rollBack();
                     die('OK');
                 }
@@ -149,7 +149,7 @@ function attlog($sn, $content)
     }
     catch(PDOException $e)
     {
-        file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+        file_put_contents(getcwd().'/logs/log_'.date('Ymd').'.txt', "\n".'['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
         $db->rollBack();
         die('OK');
     }
