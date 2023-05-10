@@ -42,6 +42,16 @@ class Zkemkeeper {
     }
 
     /**
+     * Set Device enable or disable
+     *
+     * @param boolean $bool
+     * @return void
+     */
+    public function enableDevice(bool $bool) {
+        return $this->com->EnableDevice($this->iMachineNumber, $bool);
+    }
+
+    /**
      * Get Device SN
      *
      * @return string
@@ -77,6 +87,44 @@ class Zkemkeeper {
     public function setUserTmp($dwEnrollNummber, $idx, $flag, $tmp): bool {
         return $this->com->SetUserTmpExStr($this->iMachineNumber, $dwEnrollNummber, $idx, $flag, $tmp);
     }
+
+    /**
+     * Read All User infi before Get All User
+     *
+     * @return boolean
+     */
+    public function readAllUsers(): bool {
+        return $this->com->ReadAllUserID($this->iMachineNumber);
+    }
+
+    /**
+     * Get All User data from device
+     *
+     * @return array
+     */
+    public function getAllUsers(): array {
+        $data = [];
+
+        $this->enableDevice(false);
+        // set params
+        $dwEnrollNumber = NULL;
+        $sName = NULL;
+        $sPassword = '';
+        $iPrivilege = 0;
+        $bEnabled = 0;
+        // Read All User First
+        $this->readAllUsers();
+        while($this->com->SSR_GetAllUserInfo($this->iMachineNumber, $dwEnrollNumber,$sName,$sPassword, $iPrivilege, $bEnabled))
+        {
+            $data[] = ['user_id' => $dwEnrollNumber, 'nickname' => $sName, 'password' => $sPassword, 'privilege' => $iPrivilege, 'enabled' => $bEnabled];
+        }   
+        $this->enableDevice(true);
+
+        return $data;
+    }
+
+    //Generator for GetUser fform device
+
 
     /**
      * Refresh Machine Data, (usefull after register person or finger)

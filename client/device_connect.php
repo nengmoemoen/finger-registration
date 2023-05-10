@@ -15,7 +15,7 @@ if(!filter_var($ip, FILTER_VALIDATE_IP))
 }
 
 // 
-$com = new Zkemkeeper('192.168.1.55', 4370);
+$com = new Zkemkeeper($ip, 4370);
 
 if(!$com->connect())
 {

@@ -11,6 +11,7 @@ class Devicecmd extends CI_Controller {
         $sn = $this->input->get('sn');
 
         header('Content-Type: text/plain');
+		$raw = file_get_contents('php:://input');
         // print all commmand
         $input = explode("\n", $raw);
 		foreach($input as $in) {
