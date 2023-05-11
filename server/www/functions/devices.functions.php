@@ -27,8 +27,40 @@ function getDeviceBySN($db, $sn)
     return $dev;
 }
 
-function insertDevice() {
-    $query = "INSERT INTO devices";
+function insertDevice($db, $data) {
+    $bool = false;
+    try 
+    {
+        $query = $db->prepare("INSERT INTO devices(ip_address, sn, machine_number, timezone, opstamp, stamp, transflag) VALUES 
+                                (:ip, :sn, :machine, :tz, :opstamp, :stamp, :transflag) ON DUPLICATE KEY UPDATE
+                                ip_address=:ip, sn=:sn, machine_number=:machine, timezone=:tz, :opstamp=opstamp, stamp=:stamp, transflag=:transflag");
+        $params = [
+            ':ip' => $data['ip_address'], 
+            ':sn' => $data['sn'], 
+            ':machine' => $data['machine_number'], 
+            ':tz' => $data['timezone'],
+            ':opstamp' => $data['opstamp'],
+            ':stamp' => $data['stamp'],
+            ':transflag' => $data['transflag'] 
+        ];   
+        $query->execute($params);
+
+        if($db->lastInsertId() > 0 || $db->rowCount() > 0) 
+            $bool = true;
+        else
+            $bool = false;
+        
+    }
+    catch(PDOException $e)
+    {
+        file_put_contents("\n".getcwd().'/logs/log_'.date('Ymd').'.txt', '['.date('Y-m-d H:i:s').'] '.$e->__toString(), FILE_APPEND);
+    }
+    finally
+    {
+        $db = NULL;
+    }
+
+    return $bool;
 }
 
 function operlog($db, $sn, $content) {
@@ -81,6 +113,8 @@ function operlog($db, $sn, $content) {
                                                 member=:member, fp_number=:fp_no, template=:template');
                     $query->execute([':member' => $map['pin'], ':fp_no' => $map['fid'], ':template' => $map['tmp']]);
                     $id = $db->lastInsertId();
+
+                    $db->commit();
 
                 }
                 catch(PDOException $e)

@@ -61,7 +61,26 @@ class Zkemkeeper {
         $this->com->GetSerialNumber($this->iMachineNumber, $sn);
         return $sn;
     }
+
+    /**
+     * invoke Mass update to device
+     *
+     * @param integer $override
+     * @return boolean
+     */
+    public function beginBatchUpdate(int $override): bool {
+        return $this->com->BeginBatchUpdate($this->iMachineNumber, $override);
+    }  
     
+    /**
+     * mass update data to device
+     *
+     * @return boolean
+     */
+    public function batchUpdate(): bool {
+        return $this->com->BatchUpdate($this->iMachineNumber);
+    }
+
     /**
      * Input User info to device
      *
