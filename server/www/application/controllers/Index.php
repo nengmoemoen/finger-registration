@@ -22,25 +22,33 @@ class Index extends CI_Controller {
 	public function erase_dev(): void {
 		$userid = $this->input->get('userid');
 		$devices = $this->general_model->get_all_devices();
-		$person = $this->general_model->get_members_sn('userid')[0];
+		$fingerprints = $this->general_model->get_fp_member($userid)[0];
 
+		$this->db->trans_start();
 		foreach($devices as $device) {
-			$cmd = [
-				'sn' 		=> $device['sn'],
-				'status'	=> 1,
-				'cmd'		=> trim("DATA DEL_USER PIN={$userid}"),
-			];
-	
-			if(!$this->db->insert('command', $cmd))
+
+			foreach($fingerprints as $fp)
 			{
-				$this->session->set_flashdata('error', ['message' => 'Data gagal di hapus pada alat']);
-				redirect(base_url());
-				return;
+				$cmd = [
+					'sn' 		=> $device['sn'],
+					'status'	=> 1,
+					'cmd'		=> trim("DATA DELETE FINGERTMP PIN={$userid}\tFID=".intval($fp['fp_number'])),
+				];
+
+				$this->db->insert('command', $cmd);
 			}
 		}
+		$this->db->trans_complete();
 
+		if($this->db->trans_status() == FALSE)
+		{
+			$this->db->trans_rollback();
+			$this->session->set_flashdata('error', ['message' => 'Data gagal di hapus pada alat']);
+			redirect(base_url());
+			return;
+		}
 		
-
+		$this->db->trans_commit();
 		$this->session->set_flashdata('success', ['message' => 'Data berhasil di hapus pada alat']);
 		redirect(base_url());
 	}
@@ -54,19 +62,18 @@ class Index extends CI_Controller {
 		$userid = $this->input->get('userid');
 		$devices = $this->general_model->get_all_devices();
 		$person = $this->general_model->get_members_sn($userid)[0];
+		$fingerprints = $this->general_model->get_fp_member($userid);
 
 		$this->db->trans_start();
 
 		foreach($devices as $device)
 		{
-			$cmd = [
-				'sn' 		=> $device['sn'],
-				'status'	=> 1,
-				'cmd'		=> trim("DATA USER PIN={$userid}\tName=".$person['nickname']."\tPasswd=\tCard=\tGrp=0\tTZ=".($person['timezone'] ?? 7)."\tPri=".($person['privilege'] ?? 0)),
-			];
-			$this->db->insert('command', $cmd);
-	
-			$fingerprints = $this->general_model->get_fp_member($userid);
+			// $cmd = [
+			// 	'sn' 		=> $device['sn'],
+			// 	'status'	=> 1,
+			// 	'cmd'		=> trim("DATA USER PIN={$userid}\tName=".$person['nickname']."\tPasswd=\tCard=\tGrp=0\tTZ=".($person['timezone'] ?? 7)."\tPri=".($person['privilege'] ?? 0)),
+			// ];
+			// $this->db->insert('command', $cmd);
 	
 			foreach($fingerprints as $fp)
 			{
@@ -83,11 +90,13 @@ class Index extends CI_Controller {
 
 		if($this->db->trans_status() === FALSE)
 		{
+			$this->db->trans_rollback();
 			$this->session->set_flashdata('error', ['message' => 'Data gagal di tambah pada alat']);
 			redirect(base_url());
 			return;
 		}
 
+		$this->db->trans_commit();
 		$this->session->set_flashdata('success', ['message' => 'Data berhasil di tambah pada alat']);
 		redirect(base_url());
 	}

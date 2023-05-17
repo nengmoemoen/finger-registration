@@ -114,7 +114,7 @@ class Cdata extends CI_Controller {
 					try
 					{
 						
-						$data = ['user_id' => $map['pin'], 'nickname' => $map['name'], 'privilege' => $map['pri']];
+						$data = ['user_id' => $map['pin'], 'nickname' => $map['name'], 'privilege' => $map['pri'], 'grp' => $map['grp']];
 						$this->general_model->upsert_member($data);
 	
 					}
