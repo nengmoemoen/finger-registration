@@ -48,6 +48,9 @@
                     <mark class="tertiary"><?=$_SESSION['success']['message']?></mark>
                 <?php endif; ?>
             </div>
+			<div class="col-12">
+				<a href="<?=base_url('index/get_all')?>" class="button small">Get All Personnels From Device</a>
+			</div>
             <table>
                 <thead>
                     <tr>

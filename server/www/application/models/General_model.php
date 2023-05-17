@@ -27,7 +27,7 @@ class General_model extends CI_Model {
 	 */
 	public function upsert_finger(array $data): bool {
 		if($this->db->get_where('fingerprint', ['member' => $data['member']])->num_rows() > 0)
-			return $this->db->update('fingerprint', $data, ['member' => $data['member'], 'fp_number' => $data['fo_number']]);
+			return $this->db->update('fingerprint', $data, ['member' => $data['member'], 'fp_number' => $data['fp_number']]);
 		else
 			return $this->db->insert('fingerprint', $data);
 	}

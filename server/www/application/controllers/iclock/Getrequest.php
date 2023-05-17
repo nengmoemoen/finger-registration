@@ -15,7 +15,7 @@ class Getrequest extends CI_Controller {
 
         if(count($commands) == 0 )
         {
-            echo 'OK';
+            echo "OK";
             return;   
         }
 

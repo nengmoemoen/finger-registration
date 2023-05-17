@@ -66,14 +66,14 @@ class Index extends CI_Controller {
 			];
 			$this->db->insert('command', $cmd);
 	
-			$fingerprints = $this->general_model->get_fp_member($person['member_id']);
+			$fingerprints = $this->general_model->get_fp_member($userid);
 	
 			foreach($fingerprints as $fp)
 			{
 				$cmd = [
 					'sn' 	 => $device['sn'],
 					'status' => 1, 
-					'cmd'	 => trim("DATA FP PIN=".$person['user_id']."\tFID=".$fp['fp_number']."\tValid=1\tTMP=".$fp['template'])
+					'cmd'	 => trim("DATA UPDATE FINGERTMP PIN=".$person['user_id']."\tFID=".$fp['fp_number']."\tSize=".strlen($fp['template'])."\tValid=1\tTMP=".$fp['template'])
 				];
 				$this->db->insert('command', $cmd);
 			}
@@ -88,6 +88,29 @@ class Index extends CI_Controller {
 			return;
 		}
 
+		$this->session->set_flashdata('success', ['message' => 'Data berhasil di tambah pada alat']);
+		redirect(base_url());
+	}
+	
+	/** 
+	*
+	* Get All Person Data in device
+	*
+	* @return void
+	*/
+	public function get_all() {
+		$devices = $this->general_model->get_all_devices();
+		
+		foreach($devices as $device)
+		{
+			$data = [
+				'sn'	=> $device['sn'],
+				'cmd'	=> "DATA QUERY USERINFO"
+			];
+			
+			$this->db->insert('command', $data);
+		}
+		
 		$this->session->set_flashdata('success', ['message' => 'Data berhasil di tambah pada alat']);
 		redirect(base_url());
 	}
